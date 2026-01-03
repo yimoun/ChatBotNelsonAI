@@ -36,3 +36,22 @@ public/ (index.html en dev serveur, images, favicon)
 dist/ (build output)
 tests/ (unit tests)
 package.json, tsconfig.json, .eslintrc, vitest/jest config, etc.
+
+Section 3: Préparation du back-end pour brancher l'IA au chatbot
+sur console.groq.com on se crée une APIKey, et on se choisit un model (parmis tant d'autres ) avec lequel 
+on va travailler suivant des critèere dans la section "Rate Limits" de la doc.
+On appelle une API locale (localhost): Les requettes au ChatBot se passent d'abord côté FrontEnd. 
+Si on fait appelle à l'API de GroQ côté FrontEnd, la clé API risque être sur le reseau via le contenu de la requette. Pour éviter cela, on fait passer 
+la requette de l'utilisateur via notre API ensuite notre API communiquera de façon sécurisée avec l'API de GroQ. Et la réponse vers l'utilisateur se fera dans cet mme ordre.
+
+Envoyer une requete à un LLM pour obtenir une réponse de l'IA générative:
+"Cors" est un package qui va permettre d'autoriser les appels à l'API. 
+"dotenv" permet de charger le contenu d'un fichier .env 
+"express" pour mettre en place un serveur web afin d'écouter les requetes sur un port.
+"axios" pour des requetes via des URLs.
+On fera des appels API avec trois outils différents pour avoir la pluralité d'expériences.
+Un message est un objet qui content au minimum deux prompts (le role et content):le prompt system et le prompt utilisateur.
+le role: "user" c'est pour l'utilisateur, "bot" pour le bot IA et "system" c'est pour le system (instruction configurées/personalisées par le dev) 
+
+
+

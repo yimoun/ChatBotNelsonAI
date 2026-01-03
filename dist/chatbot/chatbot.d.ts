@@ -3,7 +3,7 @@ export declare function initChatbot(options?: {
     theme?: ThemeName;
 }): {
     session: ChatSession;
-    btn: HTMLButtonElement;
+    chatBtn: HTMLButtonElement;
 };
 export default initChatbot;
 //# sourceMappingURL=chatbot.d.ts.map

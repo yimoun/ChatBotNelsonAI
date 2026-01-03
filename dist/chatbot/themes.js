@@ -1,9 +1,10 @@
-export const colorThemes = {
+export const ColorThemes = {
     blue: {
         primary: '#2d6cdf',
         background: '#fff',
         messagesBg: '#f6f7fb',
         userBg: '#2d6cdf',
+        usertext: '#fff',
         botBg: '#eee',
         botText: '#222',
         border: '#eee',
@@ -15,6 +16,7 @@ export const colorThemes = {
         background: '#fff',
         messagesBg: '#f6f7fb',
         userBg: '#ff4d4f',
+        usertext: '#fff',
         botBg: '#eee',
         botText: '#222',
         border: '#eee',
@@ -26,6 +28,7 @@ export const colorThemes = {
         background: '#fff',
         messagesBg: '#f6f7fb',
         userBg: '#52c41a',
+        usertext: '#fff',
         botBg: '#eee',
         botText: '#222',
         border: '#eee',
@@ -37,6 +40,7 @@ export const colorThemes = {
         background: '#fff',
         messagesBg: '#f6f7fb',
         userBg: '#1d1d1d',
+        usertext: '#fff',
         botBg: '#eee',
         botText: '#222',
         border: '#eee',

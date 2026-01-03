@@ -1,17 +1,18 @@
 export type ThemeName = 'blue' | 'red' | 'green' | 'dark';
-export interface ColorTheme {
+export type ColorTheme = {
     primary: string;
     background: string;
     messagesBg: string;
     userBg: string;
+    usertext: string;
     botBg: string;
     botText: string;
     border: string;
     shadow: string;
     shadowLight: string;
-}
-export interface ChatSession {
+};
+export type ChatSession = {
     id: string;
     startedAt: number;
-}
+};
 //# sourceMappingURL=types.d.ts.map

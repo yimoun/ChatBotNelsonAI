@@ -4,16 +4,17 @@
     // File Layout
     "rootDir": "src",
     "outDir": "dist",
+    
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "ES2020",
     "target": "ES2020",
     "moduleResolution": "node",
-     "esModuleInterop": true,
+    "esModuleInterop": true,
 
 
-    "types": [],
+   "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

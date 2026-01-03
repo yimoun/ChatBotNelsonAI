@@ -42,16 +42,29 @@ export function initChatbot(options?: { theme?: ThemeName }) {
 
 //Ajout de message dans le fenetre de chat
 //Envoi du message
-// Attacher l'écoute du champ une seule fois (en dehors du click)
-const inputEl = chatInput.querySelector('input') as HTMLInputElement | null;
-if (inputEl && !inputEl.dataset.chatListener) {
-    inputEl.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
+// Atteindre le sentBtn dans le chatInput avant
+const sendBtn = chatInput.querySelector('button') as HTMLButtonElement | null;
+console.log('Is sendBtn: ?', sendBtn);
+if (sendBtn) {
+    sendBtn.onclick = () => {
+        console.log('Is sendBtn: ?', sendBtn);
+        const inputEl = chatInput.querySelector('input') as HTMLInputElement | null;
+        if (inputEl) {
             sendMessage(inputEl, messagesContainer, themeName);
         }
-    });
-    inputEl.dataset.chatListener = '1';
+    };
 }
+
+// Attacher l'écoute du champ une seule fois (en dehors du click)
+// const inputEl = chatInput.querySelector('input') as HTMLInputElement | null;
+// if (inputEl && !inputEl.dataset.chatListener) {
+//     inputEl.addEventListener('keydown', (event) => {
+//         if (event.key === 'Enter') {
+//             sendMessage(inputEl, messagesContainer, themeName);
+//         }
+//     });
+//     inputEl.dataset.chatListener = '1';
+// }
 
     return { session, chatBtn };
 }

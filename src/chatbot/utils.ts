@@ -41,7 +41,36 @@ export function addMessage(
 }
 
 export async function botReply(userText: string, messages: HTMLDivElement, themeName: string): Promise<void> {
-   addMessage('...', 'bot', messages, themeName);
+   // Simulation: pour le moment le bot reponds juste ...
+    addMessage('...', 'bot', messages, themeName);
 
    // le but plus tard sera d'appeler une vrai IA  via une API
+
+   try {
+       const res = await fetch('http://localhost:5173/api/bot', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({ text: userText }),
+       });
+
+       if (!res.ok) {
+           throw new Error('Network response was not ok');
+       }
+
+       const data = await res.json();
+       messages.lastChild?.remove(); //On retire les "..." avant d'afficher la réponse du Bot
+       addMessage(data.reply || 'Réponse indisponible', 'bot', messages, themeName);
+       //TODO: Gérer les messages ou informations supplémentaires (ex: fichiers) dans la réponse
+       if(data.extra) addMessage(data.extra, 'bot', messages, themeName);
+   }
+   catch (error) {
+       messages.lastChild?.remove(); // On retire les "..." en cas d'erreur
+       addMessage('Erreur serveur.', 'bot', messages, themeName);
+       console.error("Erreur lors de la réponse du bot :", error);
+   }
 }
+
+
+      
