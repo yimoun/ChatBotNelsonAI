@@ -53,5 +53,21 @@ On fera des appels API avec trois outils différents pour avoir la pluralité d'
 Un message est un objet qui content au minimum deux prompts (le role et content):le prompt system et le prompt utilisateur.
 le role: "user" c'est pour l'utilisateur, "bot" pour le bot IA et "system" c'est pour le system (instruction configurées/personalisées par le dev) 
 
+le fichier chatbot-server.ts et le .env doivent être au meme niveau de repertoir (repertoir racine)
+
+Création d'un outil pour récupérer le contenu d'une page web:
+Le bot doit savoir comment le iste marche pour effectuer des actions concrètes.
+notion.so est un outils très utils pour documenter en entreprise.
+Nous l'utiliserons pour creer de la documentation de notre site. On aurait pu le faire via une page (section FAQ) du site...Le plus 
+important est d'avoir du texte accessible via une URL.
+Avec une limite de token de 6000, une documentation à envpoyer à Groq ne doit pas être trop grande, maximum 15pages,à
+ une astuce est de subdiviser un document trop grand en plusieurs petits documents.
+ "puppeteer" est un outil qui permet de charger une page web et voir juste son contenu sans les balises et tous le reste 
 
 
+
+Langchain
+Mermaidchart.com pour la génération de Diagramme
+
+Permettre au Cahtbot IA d'utiliser un outil et d'effectuer une action (Partie 1):
+À ce stade le chatBot est capable de répondre (d'abord) à une question complexe avec le nom de l'outil qu'il est sensé utilisé.

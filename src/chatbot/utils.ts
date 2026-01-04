@@ -45,16 +45,15 @@ export async function botReply(userText: string, messages: HTMLDivElement, theme
     addMessage('...', 'bot', messages, themeName);
 
    // le but plus tard sera d'appeler une vrai IA  via une API
-
    try {
-       const res = await fetch('http://localhost:5173/api/bot', {
+       const res = await fetch('http://localhost:3000/chat', {
            method: 'POST',
            headers: {
                'Content-Type': 'application/json',
            },
            body: JSON.stringify({ text: userText }),
        });
-
+       console.log("Réponse du serveur de notre API reçue :", res);
        if (!res.ok) {
            throw new Error('Network response was not ok');
        }
