@@ -2,7 +2,7 @@
 import { ColorThemes } from './themes';
 import { createOpenButton, createChatWindow, createChatHeader, createMessagesContainer, createChatInput } from './ui';
 import type { ThemeName, ChatSession, ColorTheme } from './types';
-import { addMessage, sendMessage } from './utils';
+import {  sendMessage } from './utils';
 
 export function initChatbot(options?: { theme?: ThemeName }) {
     const themeName = options?.theme ?? 'blue';
@@ -50,7 +50,7 @@ if (sendBtn) {
         console.log('Is sendBtn: ?', sendBtn);
         const inputEl = chatInput.querySelector('input') as HTMLInputElement | null;
         if (inputEl) {
-            sendMessage(inputEl, messagesContainer, themeName);
+            sendMessage(inputEl, messagesContainer, themeName, session);
         }
     };
 }

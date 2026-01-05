@@ -1,7 +1,7 @@
 // entrée publique : init/start
 import { ColorThemes } from './themes';
 import { createOpenButton, createChatWindow, createChatHeader, createMessagesContainer, createChatInput } from './ui';
-import { addMessage, sendMessage } from './utils';
+import { sendMessage } from './utils';
 export function initChatbot(options) {
     const themeName = options?.theme ?? 'blue';
     const theme = (ColorThemes[themeName] ?? ColorThemes.blue);
@@ -43,7 +43,7 @@ export function initChatbot(options) {
             console.log('Is sendBtn: ?', sendBtn);
             const inputEl = chatInput.querySelector('input');
             if (inputEl) {
-                sendMessage(inputEl, messagesContainer, themeName);
+                sendMessage(inputEl, messagesContainer, themeName, session);
             }
         };
     }

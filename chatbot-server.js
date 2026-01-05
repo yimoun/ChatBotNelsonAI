@@ -5,6 +5,7 @@ import axios from 'axios';
 import { exec } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { isAccountIntent } from './helpers.js';
 
 
 config();
@@ -57,33 +58,78 @@ app.get('/fetch-delivery', async (req, res) => {
 // Route / chat pour générer les réponses du bot IA
  // Juste générer une répônse pour un début
 app.post('/chat', async (req, res) => { 
-  const userMsg = req.body.text;
+  const userMsg = req.body.message;
   console.log('userMsg content', userMsg);
   const sessionID = req.body.sessionId || 'default';
 
   if(!userMsg) return res.status(400).json({ error: 'Message manquant' });
 
+  console.log("req.body", req.body);
+
   try {
     let messages;
 
-    messages = [
+    if(req.body.documentation) {
+
+       messages = [
         // Prompt system
         {
-            role:'system', 
-            content:
+          role:'system', 
+          content:
+          'Tu es un assistant utile pour un site de e-commerce qui s\'appelle ShopEx et qui vend des produits high-tech. ' +
+          'utilise la documentation fournie pour répondre répondre précisement à la question de l\'utilisateur.' +
+          ' Ne propose pas d\'utiliser un outil, répond directement.' 
+        },
+        {
+            role: 'system',
+            content: 'Documentation du site:\n' + req.body.documentation
+        },
+        // Prompt user
+        {
+          role: 'user',
+          content: userMsg
+        }
+           ];
+
+    }else if(req.body.delivery) {
+       messages = [
+        // Prompt system
+        {
+          role:'system', 
+          content:
+          'Tu es un assistant utile pour un site de e-commerce qui s\'appelle ShopEx et qui vend des produits high-tech. ' +
+          'utilise les informations sur les frais de livraison fournies pour répondre répondre précisement à la question de l\'utilisateur.' +
+          ' Ne propose pas d\'utiliser un outil, répond directement.' 
+        },
+        {
+          role: 'system',
+          content: 'Informations sur les frais de livraison:\n' + req.body.delivery
+        },
+        // Prompt user
+        {
+          role: 'user',
+          content: userMsg
+        }
+       ];
+    } else {
+          messages = [
+        // Prompt system
+        {
+          role:'system', 
+          content:
           'Tu es un assistant utile pour un site de e-commerce qui s\'appelle ShopEx et qui vend des produits high-tech. ' +
           'Si l\'utilisateur pose une question relative à la navigation sur le site, la création ou la gestion de compte, l\'achat, la commande, le paiement ou la livraison, tu dois répondre EXACTEMENT avec un objet JSON seul, par exemple {"tool":"documentation"} ou {"tool":"delivery"} selon le cas — aucune explication supplémentaire, rien d\'autre. ' +
           'Si la question concerne les frais de livraison, réponds exactement {"tool":"delivery"}. ' +
           'Si la question concerne la création/gestion de compte ou navigation, réponds exactement {"tool":"documentation"}. ' +
           'Si la question ne correspond à ces cas, réponds normalement en texte.'
-
         },
         // Prompt user
         {
-            role: 'user',
-            content: userMsg
+          role: 'user',
+          content: userMsg
         }
-    ];
+           ];
+    }
 
     // On obtient la réponse en faisant un appel POST à l'API de Groq
     const response = await axios.post(GROQ_API_URL, {
@@ -100,7 +146,36 @@ app.post('/chat', async (req, res) => {
     console.log('Groq raw response:', JSON.stringify(response.data, null, 2));
 
     const botReply = response.data.choices[0].message.content;
-    res.json({ reply: botReply });
+    let extraMsg = null // Pour gerer les messages ou informations supplémentaires
+
+    // TODO: Gérer les outils
+
+    //Injecter tuto vidéo si aaplicable
+    //Une anlyse sémentique du UserMsg  (on aurait pu utiliser une IA pour cela)
+    // liste de patterns / synonymes prioritaires
+    const patterns = [
+      'creer un compte', 'creer compte', 'ouvrir un compte', 'ouvrir compte',
+      'inscription', 'sinscrire', "s'inscrire", 'creer compte', 'creer un profil',
+      'connexion', 'se connecter', 'mot de passe', 'mdp', 'changer mot de passe', 'reset password',
+      'compte'
+      ];
+    const lowerMsg = userMsg.toLowerCase();
+      if (isAccountIntent(lowerMsg, patterns)) {
+        extraMsg = 'Cette vidéo pourrait vous intéresser :<br><video src="./videos/create-account.mp4" controls style="width:100%;max-width:320px;"></video>';
+      } else if (/changer mon mot de passe|modifier mon mot de passe|changer de mot de passe|changement mot de passe/.test(normalizeText(userMsg))) {
+        extraMsg = 'Cette vidéo pourrait vous intéresser :<br><video src="./videos/change-password.mp4" controls style="width:100%;max-width:320px;"></video>';
+      }
+        // if (/créer un compte|ouvrir un compte|inscription/.test(lowerMsg)) {
+        //     extraMsg = 'Cette vidéo pourrait vous intéresser :<br><video src="./videos/create-account.mp4" controls style="width:100%;max-width:320px;"></video>';
+        // } else if (/changer mon mot de passe|modifier mon mot de passe|changer de mot de passe|changement mot de passe/.test(lowerMsg)) {
+        //     extraMsg = 'Cette vidéo pourrait vous intéresser :<br><video src="./videos/change-password.mp4" controls style="width:100%;max-width:320px;"></video>';
+        // }
+
+     if (extraMsg) {
+            res.json({ reply: botReply, extra: extraMsg });
+        } else {
+            res.json({ reply: botReply });
+        }
   } catch (error) {
     console.log('Error fetching response from Groq API:', error);
     res.status(500).json({ error: 'Failed to generate response' });

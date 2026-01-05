@@ -71,3 +71,21 @@ Mermaidchart.com pour la génération de Diagramme
 
 Permettre au Cahtbot IA d'utiliser un outil et d'effectuer une action (Partie 1):
 À ce stade le chatBot est capable de répondre (d'abord) à une question complexe avec le nom de l'outil qu'il est sensé utilisé.
+
+Permettre au Cahtbot IA d'utiliser un outil et d'effectuer une action (Partie 2):
+    Principe: Lors du 1er appel, si l'utilisateur pose une question et s'il y'a des instructions:soit il me répond directement, 
+    soit il n'a pas la réponse et il utilise un outil:documentation ou delivery. S'il utilise un outil côté chatBot, on va injecter l'outil dans le body de la requete
+    en rapelant le endPoint /chat, 
+
+Permettre à l'IA d'injecter une vidéo dans la fenêtre de chat:
+Sur certain sites on peut imaginer qu'on ait des vidéos tutoriels (sur comment changer de mot de passe ou sur comment
+ creer un compte ou sur comment booker un rdv avec l'équipe de support)
+
+
+Permettre à l'IA de lire et de modifier le contenu d'une base de données: 
+
+
+
+
+Q1: Si apres avoir bien obtenu une réponse à une question, j'envoie :"je te repose la meme question" 
+je suis sensé avoir la meme réponse, mais ce n'est pas encore le cas...surtement lier au remove().lastchild que je fais 

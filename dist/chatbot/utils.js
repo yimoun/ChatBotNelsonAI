@@ -1,7 +1,7 @@
 import { parseMarkdown } from "./helpers";
 import { ColorThemes } from "./themes";
 //Envoi de message
-export async function sendMessage(input, messages, themeName, message) {
+export async function sendMessage(input, messages, themeName, chatSession) {
     const text = input.value.trim();
     if (text === '')
         return;
@@ -11,7 +11,7 @@ export async function sendMessage(input, messages, themeName, message) {
     console.log("Message envoyé :", text);
 }
 //Ajout de message dans la fenêtre de chat
-export function addMessage(text, from, messages, themeName = 'blue') {
+export function addMessage(text, from, messages, themeName = 'blue', chatSession) {
     const msg = document.createElement('div');
     msg.style.marginBottom = '0.7rem';
     msg.style.textAlign = from === 'user' ? 'right' : 'left';
@@ -28,28 +28,110 @@ export function addMessage(text, from, messages, themeName = 'blue') {
     messages.scrollTop = messages.scrollHeight;
     return msg;
 }
-export async function botReply(userText, messages, themeName) {
+export async function botReply(userText, messages, themeName, chatSession) {
     // Simulation: pour le moment le bot reponds juste ...
     addMessage('...', 'bot', messages, themeName);
-    // le but plus tard sera d'appeler une vrai IA  via une API
     try {
         const res = await fetch('http://localhost:3000/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ text: userText }),
+            body: JSON.stringify({ message: userText, chatSession }),
         });
-        console.log("Réponse du serveur de notre API reçue :", res);
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }
         const data = await res.json();
         messages.lastChild?.remove(); //On retire les "..." avant d'afficher la réponse du Bot
-        addMessage(data.reply || 'Réponse indisponible', 'bot', messages, themeName);
-        //TODO: Gérer les messages ou informations supplémentaires (ex: fichiers) dans la réponse
-        if (data.extra)
-            addMessage(data.extra, 'bot', messages, themeName);
+        // gestion des tools
+        if (data.reply === '{"tool":"documentation"}') {
+            //Gestion du cache local de la documentation
+            let cachedDoc = localStorage.getItem('shopDoc');
+            if (!cachedDoc) {
+                const docRes = await fetch('http://localhost:3000/fetch-doc');
+                if (docRes.ok) {
+                    cachedDoc = await docRes.text();
+                    localStorage.setItem('shopDoc', cachedDoc);
+                }
+                // Réintérrogation de Groq avec la doc dans le context
+                const res2 = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userText, documentation: cachedDoc, chatSession }),
+                });
+                const data2 = await res2.json();
+                addMessage(data2.reply || 'Réponse indisponible', 'bot', messages, themeName);
+                if (data2.extra)
+                    addMessage(data2.extra, 'bot', messages, themeName);
+            }
+            else if (cachedDoc) {
+                // Réintérrogation de Groq avec la doc dans le context
+                const res2 = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userText, delivery: cachedDoc, chatSession }),
+                });
+                const data2 = await res2.json();
+                console.log("contenu de la réponse data2 :", data2);
+                addMessage(data2.reply || 'Réponse indisponible', 'bot', messages, themeName);
+                if (data2.extra)
+                    addMessage(data2.extra, 'bot', messages, themeName);
+            }
+            else {
+                addMessage(data.reply || 'Réponse indisponible', 'bot', messages, themeName);
+                //TODO: Gérer les messages ou informations supplémentaires (ex: fichiers) dans la réponse
+                if (data.extra)
+                    addMessage(data.extra, 'bot', messages, themeName);
+            }
+        }
+        else if (data.reply === '{"tool":"delivery"}') {
+            //Gestion du cache local de la documentation
+            let cachedDelivery = localStorage.getItem('shopDelivery');
+            if (!cachedDelivery) {
+                const deliveryRes = await fetch('http://localhost:3000/fetch-delivery');
+                if (deliveryRes.ok) {
+                    cachedDelivery = await deliveryRes.text();
+                    localStorage.setItem('shopDelivery', cachedDelivery);
+                }
+                // Réintérrogation de Groq avec la doc dans le context
+                const res2 = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userText, delivery: cachedDelivery, chatSession }),
+                });
+                const data2 = await res2.json();
+                addMessage(data2.reply || 'Réponse indisponible', 'bot', messages, themeName);
+                if (data2.extra)
+                    addMessage(data2.extra, 'bot', messages, themeName);
+            }
+            else if (cachedDelivery) {
+                // Réintérrogation de Groq avec la doc dans le context
+                const res2 = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userText, delivery: cachedDelivery, chatSession }),
+                });
+                const data2 = await res2.json();
+                addMessage(data2.reply || 'Réponse indisponible', 'bot', messages, themeName);
+                if (data2.extra)
+                    addMessage(data2.extra, 'bot', messages, themeName);
+            }
+            else {
+                addMessage(data.reply || 'Réponse indisponible', 'bot', messages, themeName);
+                //TODO: Gérer les messages ou informations supplémentaires (ex: fichiers) dans la réponse
+                if (data.extra)
+                    addMessage(data.extra, 'bot', messages, themeName);
+            }
+        }
     }
     catch (error) {
         messages.lastChild?.remove(); // On retire les "..." en cas d'erreur
