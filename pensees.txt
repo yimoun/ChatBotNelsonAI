@@ -1,0 +1,106 @@
+SessionId est unique pour chaque session de chat:  
+Pour Identifier de facon unique chaque session de chat pour identifier chaque conversation
+
+Conseils d’un dev senior (attitudes)
+
+Single Responsibility: chaque fichier a une responsabilité unique (types, UI, API).
+DI / testabilité: fonctions reçoivent dépendances (theme, session, client API) au lieu d'utiliser des singletons globaux.
+Types stricts: active "strict": true dans tsconfig pour attraper erreurs tôt.
+Pas de DOM muté partout: centraliser les manipulations DOM dans ui.ts.
+Logging et instrumentation: utiliser petits wrappers logger pour debug/production.
+Tests unitaires: couvrir utils et logique (init, génération session id) avant UI.
+CI/CD: build + lint + test dans pipeline.
+Versioning & packaging: si le widget est réutilisable, envisager publication (npm) ou packager en bundle UMD/ESM selon usage.
+
+Principes clés (résumé)
+
+Séparer la source (src/) du build (dist/). Tu as déjà dist/ — parfait.
+Organiser par feature: src/chatbot/{index.ts, ui.ts, themes.ts, types.ts, api.ts, utils.ts}
+Ne pas utiliser d'IIFE pour le code modulaire — utiliser des exports/imports ES modules.
+Mettre les types dans un fichier dédié (types.ts) pour réutilisabilité et tests.
+Avoir un point d'entrée par feature (index.ts) qui exporte init/start.
+Ajouter scripts npm pour build/watch/dev (vite) et tests/lint.
+Prévoir dossier public/ pour index.html et assets statiques si besoin.
+Arborescence recommandée
+
+src/
+chatbot/
+index.ts (entrée publique : init/start)
+ui.ts (DOM, styles inline ou CSS module)
+themes.ts (const colorThemes export)
+types.ts (interfaces / types)
+api.ts (gestion des appels serveur)
+utils.ts (helpers)
+shared/ (types/utilitaires partagés si besoin)
+public/ (index.html en dev serveur, images, favicon)
+dist/ (build output)
+tests/ (unit tests)
+package.json, tsconfig.json, .eslintrc, vitest/jest config, etc.
+
+Section 3: Préparation du back-end pour brancher l'IA au chatbot
+sur console.groq.com on se crée une APIKey, et on se choisit un model (parmis tant d'autres ) avec lequel 
+on va travailler suivant des critères dans la section "Rate Limits" de la doc.
+On appelle une API locale (localhost): Les requettes au ChatBot se passent d'abord côté FrontEnd. 
+Si on fait appelle à l'API de GroQ côté FrontEnd, la clé API risque être sur le reseau via le contenu de la requette. Pour éviter cela, on fait passer 
+la requette de l'utilisateur via notre API ensuite notre API communiquera de façon sécurisée avec l'API de GroQ. Et la réponse vers l'utilisateur se fera dans cet mme ordre.
+
+Envoyer une requete à un LLM pour obtenir une réponse de l'IA générative:
+"Cors" est un package qui va permettre d'autoriser les appels à l'API. 
+"dotenv" permet de charger le contenu d'un fichier .env 
+"express" pour mettre en place un serveur web afin d'écouter les requetes sur un port.
+"axios" pour des requetes via des URLs.
+On fera des appels API avec trois outils différents pour avoir la pluralité d'expériences.
+Un message est un objet qui content au minimum deux prompts (le role et content):le prompt system et le prompt utilisateur.
+le role: "user" c'est pour l'utilisateur, "bot" pour le bot IA et "system" c'est pour le system (instruction configurées/personalisées par le dev) 
+
+le fichier chatbot-server.ts et le .env doivent être au meme niveau de repertoir (repertoir racine)
+
+Création d'un outil pour récupérer le contenu d'une page web:
+Le bot doit savoir comment le site marche pour effectuer des actions concrètes.
+notion.so est un outils très utils pour documenter en entreprise.
+Nous l'utiliserons pour creer de la documentation de notre site. On aurait pu le faire via une page (section FAQ) du site...Le plus 
+important est d'avoir du texte accessible via une URL.
+Avec une limite de token de 6000, une documentation à envpoyer à Groq ne doit pas être trop grande, maximum 15pages, à
+ une astuce est de subdiviser un document trop grand en plusieurs petits documents.
+ "puppeteer" est un outil qui permet de charger une page web et voir juste son contenu sans les balises et tous le reste 
+
+
+
+Langchain
+Mermaidchart.com pour la génération de Diagramme
+
+Permettre au Cahtbot IA d'utiliser un outil et d'effectuer une action (Partie 1):
+À ce stade le chatBot est capable de répondre (d'abord) à une question complexe avec le nom de l'outil qu'il est sensé utilisé.
+pour chaque page de documentation on creer une route dédiée dans le chatbot-server
+
+Permettre au Cahtbot IA d'utiliser un outil et d'effectuer une action (Partie 2):
+    Principe: Lors du 1er appel, si l'utilisateur pose une question et s'il y'a des instructions:soit il me répond directement, 
+    soit il n'a pas la réponse et il utilise un outil:documentation ou delivery. S'il utilise un outil côté chatBot, on va injecter l'outil dans le body de la requete
+    en rapelant le endPoint /chat, 
+
+Permettre à l'IA d'injecter une vidéo dans la fenêtre de chat:
+Sur certain sites on peut imaginer qu'on ait des vidéos tutoriels (sur comment changer de mot de passe ou sur comment
+ creer un compte ou sur comment booker un rdv avec l'équipe de support)
+
+
+Permettre à l'IA de lire et de modifier le contenu d'une base de données: 
+rajouter un tool et suivre la meme logique de réponse entre le front, back et l'API De GroQ
+
+Démonstratrartion de hack DB et protection contre ce hack pour sécuriser la BDD:
+
+Permettre au chatbot de générer une facture PDF et de l'insérer dans le chat:
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Q1: Si apres avoir bien obtenu une réponse à une question, j'envoie :"je te repose la meme question" 
+je suis sensé avoir la meme réponse, mais ce n'est pas encore le cas...surtement lier au remove().lastchild que je fais 

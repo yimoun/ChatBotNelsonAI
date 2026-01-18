@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "marie.dupont@email.com",
+      "password": "securePass123!",
+      "address": "NelNel"
+    },
+    {
+      "id": 2,
+      "email": "jean.martin@email.com",
+      "password": "myPassword456$",
+      "address": "Axnel-nel"
+    },
+    {
+      "id": 3,
+      "email": "sophie.bernard@email.com",
+      "password": "strongPass789#",
+      "address": "78 Boulevard Saint-Germain, 75005 Paris, France"
+    },
+    {
+      "id": 4,
+      "email": "pierre.dubois@email.com",
+      "password": "password2024@",
+      "address": "23 Rue du Faubourg Saint-Honoré, 75008 Paris, France"
+    },
+    {
+      "id": 5,
+      "email": "claire.robert@email.com",
+      "password": "mySecure2025&",
+      "address": "56 Quai de la Seine, 75019 Paris, France"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 15 Pro",
+      "price": 1199.99,
+      "category": "Smartphones"
+    },
+    {
+      "id": 2,
+      "name": "MacBook Air M2",
+      "price": 1299.99,
+      "category": "Laptops"
+    },
+    {
+      "id": 3,
+      "name": "Samsung Galaxy S24",
+      "price": 899.99,
+      "category": "Smartphones"
+    },
+    {
+      "id": 4,
+      "name": "Sony WH-1000XM5",
+      "price": 399.99,
+      "category": "Audio"
+    },
+    {
+      "id": 5,
+      "name": "iPad Pro 12.9",
+      "price": 1099.99,
+      "category": "Tablets"
+    },
+    {
+      "id": 6,
+      "name": "Dell XPS 15",
+      "price": 1599.99,
+      "category": "Laptops"
+    },
+    {
+      "id": 7,
+      "name": "AirPods Pro 2",
+      "price": 249.99,
+      "category": "Audio"
+    },
+    {
+      "id": 8,
+      "name": "Apple Watch Series 9",
+      "price": 429.99,
+      "category": "Wearables"
+    },
+    {
+      "id": 9,
+      "name": "Samsung Galaxy Tab S9",
+      "price": 799.99,
+      "category": "Tablets"
+    },
+    {
+      "id": 10,
+      "name": "Bose QuietComfort 45",
+      "price": 329.99,
+      "category": "Audio"
+    }
+  ]
+}
