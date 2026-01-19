@@ -1,5 +1,5 @@
 # ChatBotNelsonAI
-Ce repository contient tout ce qui est en lien avec le tutio sur Udemy
+Ce repository contient tout ce qui est en lien avec le tuto sur Udemy
 # 🤖 ChatBot IA E-commerce - ShopEx
 
 
