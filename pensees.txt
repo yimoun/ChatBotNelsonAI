@@ -91,6 +91,10 @@ Démonstratrartion de hack DB et protection contre ce hack pour sécuriser la BD
 Permettre au chatbot de générer une facture PDF et de l'insérer dans le chat:
 
 
+Action avancée : Permettre au charbot de demander des infos complémentaires
+-->Système de gestion des demandes incomplètes
+-->Nettoyage automatiques des demandes expirées (5minutes)
+    --> Celles avec tool:invoice seront les seules types de demandes en attentes qui seront présentées dans cette formation, il faudra juste adapter pour le reste.
 
 
 

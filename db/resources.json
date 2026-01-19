@@ -1,0 +1,48 @@
+{
+  "title": "📚 Centre d'aide ShopEx 📚",
+  "description": "Voici les ressources disponibles pour vous aider :",
+  "resources": [
+    {
+      "icon": "🔹",
+      "label": "Documentation complète",
+      "type": "link",
+      "url": "https://shopex-docs.notion.site",
+      "text": "Guide utilisateur"
+    },
+    {
+      "icon": "🔹",
+      "label": "Tutoriels vidéo",
+      "type": "link",
+      "url": "https://youtube.com/shopex-tutorials",
+      "text": "Chaîne YouTube"
+    },
+    {
+      "icon": "🔹",
+      "label": "FAQ",
+      "type": "link",
+      "url": "https://shopex.com/faq",
+      "text": "Questions fréquentes"
+    },
+    {
+      "icon": "🔹",
+      "label": "Support technique",
+      "type": "contact",
+      "email": "support@shopex.com",
+      "phone": "+33 1 23 45 67 89"
+    },
+    {
+      "icon": "🔹",
+      "label": "Chat en direct",
+      "type": "text",
+      "text": "Disponible du lundi au vendredi, 9h-18h"
+    },
+    {
+      "icon": "📥",
+      "label": "Guide PDF",
+      "type": "download",
+      "url": "/docs/guide-shopex.pdf",
+      "text": "Télécharger le guide"
+    }
+  ],
+  "footer": "💡 N'hésitez pas à me poser des questions spécifiques !"
+}
